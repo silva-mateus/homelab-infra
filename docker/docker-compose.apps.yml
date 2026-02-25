@@ -1,0 +1,83 @@
+services:
+  # ============================================================
+  # Musicas Igreja
+  # ============================================================
+  musicas-igreja-api:
+    image: ghcr.io/${GITHUB_USER}/musicas-igreja-api:latest
+    container_name: musicas-igreja-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=musicas_igreja;User=${MUSICAS_DB_USER};Password=${MUSICAS_DB_PASSWORD};CharSet=utf8mb4"
+    volumes:
+      - musicas_data:/app/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  musicas-igreja-web:
+    image: ghcr.io/${GITHUB_USER}/musicas-igreja-web:latest
+    container_name: musicas-igreja-web
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://musicas-igreja-api:5000
+    depends_on:
+      - musicas-igreja-api
+
+  # ============================================================
+  # Gerenciamento Pastoral
+  # ============================================================
+  gerenciamento-pastoral-api:
+    image: ghcr.io/${GITHUB_USER}/gerenciamento-pastoral-api:latest
+    container_name: gerenciamento-pastoral-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=gerenciamento_pastoral;User=${PASTORAL_DB_USER};Password=${PASTORAL_DB_PASSWORD};CharSet=utf8mb4"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  gerenciamento-pastoral-web:
+    image: ghcr.io/${GITHUB_USER}/gerenciamento-pastoral-web:latest
+    container_name: gerenciamento-pastoral-web
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://gerenciamento-pastoral-api:5000
+    depends_on:
+      - gerenciamento-pastoral-api
+
+  # ============================================================
+  # Gerenciamento Financeiro
+  # ============================================================
+  gerenciamento-financeiro-api:
+    image: ghcr.io/${GITHUB_USER}/gerenciamento-financeiro-api:latest
+    container_name: gerenciamento-financeiro-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=gerenciamento_financeiro;User=${FINANCEIRO_DB_USER};Password=${FINANCEIRO_DB_PASSWORD};CharSet=utf8mb4"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  gerenciamento-financeiro-web:
+    image: ghcr.io/${GITHUB_USER}/gerenciamento-financeiro-web:latest
+    container_name: gerenciamento-financeiro-web
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://gerenciamento-financeiro-api:5000
+    depends_on:
+      - gerenciamento-financeiro-api
+
+volumes:
+  musicas_data:
+    name: homelab_musicas_data
+
+networks:
+  default:
+    name: homelab
+    external: true

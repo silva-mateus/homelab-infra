@@ -1,0 +1,59 @@
+---
+description: Regras de seguranca para repositorios publicos - protecao contra vazamento de dados sensiveis
+alwaysApply: true
+---
+
+# Git & Public Repository Rules
+
+## Context
+
+This repository is **public** and serves as a portfolio for potential employers/interviewers. No external contributions are accepted. All code must be safe for public visibility at all times.
+
+## Sensitive Data -- NEVER Commit
+
+- **API keys, tokens, secrets** of any kind
+- **Connection strings** with real credentials
+- **Passwords** or password hashes from real users
+- **`.env` files** with real values
+- **Private keys**, certificates, or PEM files
+- **Personal data** (real names, emails, phone numbers, addresses)
+- **Internal URLs** to private servers, databases, or services
+- **OAuth client secrets** or webhook secrets
+- **Cloud provider credentials** (AWS, Azure, GCP keys)
+
+## What To Do Instead
+
+- Use **environment variables** for all secrets and configuration
+- Use **.NET User Secrets** (`dotnet user-secrets`) for local development
+- If an example config is needed, use **clearly fake values**:
+  ```
+  DB_HOST=localhost
+  DB_PASSWORD=your-password-here
+  API_KEY=your-api-key-here
+  ```
+- Reference secrets via `IConfiguration` / `Environment.GetEnvironmentVariable()`, never inline
+- Keep `.env`, `.env.*`, `appsettings.Development.json`, and `secrets.json` in `.gitignore`
+
+## Before Every Commit -- Mental Checklist
+
+1. Are there any hardcoded credentials, keys, or tokens?
+2. Are there any real connection strings?
+3. Are there any personal data or internal URLs?
+4. Are new config files properly gitignored?
+5. Does the code compile/build without needing any secret to be present?
+
+## .gitignore Must Include
+
+Ensure these patterns are always present in `.gitignore`:
+- `.env` and `.env.*`
+- `appsettings.Development.json`
+- `appsettings.Local.json`
+- `secrets.json`
+- `*.pfx`, `*.pem`, `*.key`
+
+## Contribution Policy
+
+- This is a **solo project** -- no external PRs or contributions
+- Do NOT create CONTRIBUTING.md, CODE_OF_CONDUCT.md, or issue templates
+- Do NOT add CI badges for external contributors
+- Keep the repository clean and professional as a portfolio piece

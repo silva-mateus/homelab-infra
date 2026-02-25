@@ -1,0 +1,20 @@
+# Cloudflare Tunnel configuration
+# This file maps public hostnames to internal services.
+# Actual tunnel config is managed via Cloudflare dashboard when using TUNNEL_TOKEN.
+#
+# If using config file mode instead of token, place this at:
+#   ~/.cloudflared/config.yml
+#
+# Example ingress rules:
+#
+# tunnel: <your-tunnel-id>
+# credentials-file: /root/.cloudflared/<tunnel-id>.json
+#
+# ingress:
+#   - hostname: musicas.yourdomain.com
+#     service: http://musicas-igreja-web:3000
+#   - hostname: pastoral.yourdomain.com
+#     service: http://gerenciamento-pastoral-web:3000
+#   - hostname: financeiro.yourdomain.com
+#     service: http://gerenciamento-financeiro-web:3000
+#   - service: http_status:404
