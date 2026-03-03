@@ -17,9 +17,9 @@ on:
         type: string
     secrets:
       DEPLOY_SSH_KEY:
-        required: true
+        required: false
       DEPLOY_HOST:
-        required: true
+        required: false
       DEPLOY_USER:
         required: false
 
@@ -59,16 +59,11 @@ jobs:
 
   deploy:
     needs: build-and-push
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER || 'root' }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            cd /opt/homelab/docker
-            docker compose -f docker-compose.apps.yml pull ${{ inputs.service_name }}
-            docker compose -f docker-compose.apps.yml up -d ${{ inputs.service_name }}
-            docker image prune -f
+      - name: Pull new image and restart service
+        run: |
+          cd /opt/homelab/docker
+          docker compose -f docker-compose.apps.yml pull ${{ inputs.service_name }}
+          docker compose -f docker-compose.apps.yml up -d ${{ inputs.service_name }}
+          docker image prune -f
