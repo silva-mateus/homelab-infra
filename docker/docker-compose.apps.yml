@@ -9,11 +9,11 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
-      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=musicas_igreja;User=${MUSICAS_DB_USER};Password=${MUSICAS_DB_PASSWORD};CharSet=utf8mb4"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=musicas_igreja;Username=${MUSICAS_DB_USER};Password=${MUSICAS_DB_PASSWORD}"
     volumes:
       - musicas_data:/app/data
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
 
   musicas-igreja-web:
@@ -35,9 +35,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
-      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=gerenciamento_pastoral;User=${PASTORAL_DB_USER};Password=${PASTORAL_DB_PASSWORD};CharSet=utf8mb4"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gerenciamento_pastoral;Username=${PASTORAL_DB_USER};Password=${PASTORAL_DB_PASSWORD}"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
 
   gerenciamento-pastoral-web:
@@ -59,9 +59,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
-      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=gerenciamento_financeiro;User=${FINANCEIRO_DB_USER};Password=${FINANCEIRO_DB_PASSWORD};CharSet=utf8mb4"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gerenciamento_financeiro;Username=${FINANCEIRO_DB_USER};Password=${FINANCEIRO_DB_PASSWORD}"
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
 
   gerenciamento-financeiro-web:

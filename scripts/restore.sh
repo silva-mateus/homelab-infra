@@ -15,13 +15,12 @@ if [ -f "$COMPOSE_DIR/.env" ]; then
     set +a
 fi
 
-# List available backups
 echo ""
-echo "Available MySQL backups:"
-ls -lh "$BACKUP_DIR"/mysql_*.sql.gz 2>/dev/null || echo "  (none found)"
+echo "Available PostgreSQL backups:"
+ls -lh "$BACKUP_DIR"/postgres_*.sql.gz 2>/dev/null || echo "  (none found)"
 echo ""
 
-read -rp "Enter the full path to the MySQL backup file: " BACKUP_FILE
+read -rp "Enter the full path to the PostgreSQL backup file: " BACKUP_FILE
 
 if [ ! -f "$BACKUP_FILE" ]; then
     echo "ERROR: File not found: $BACKUP_FILE"
@@ -29,26 +28,25 @@ if [ ! -f "$BACKUP_FILE" ]; then
 fi
 
 echo ""
-echo "WARNING: This will overwrite ALL databases in the MySQL instance."
+echo "WARNING: This will overwrite ALL databases in the PostgreSQL instance."
 read -rp "Are you sure? (yes/no): " CONFIRM
 if [ "$CONFIRM" != "yes" ]; then
     echo "Aborted."
     exit 0
 fi
 
-# Ensure MySQL is running
 echo ""
-echo "[1/2] Ensuring MySQL is running..."
+echo "[1/2] Ensuring PostgreSQL is running..."
 cd "$COMPOSE_DIR"
-docker compose up -d mysql
+docker compose up -d postgres
 sleep 5
 
-# Restore
 echo "[2/2] Restoring from $BACKUP_FILE..."
-gunzip -c "$BACKUP_FILE" | docker compose exec -T mysql mysql -u root -p"${MYSQL_ROOT_PASSWORD}"
+gunzip -c "$BACKUP_FILE" | docker compose exec -T postgres psql -U postgres
 
 echo ""
 echo "Restore complete. Restarting application services..."
+cd "$COMPOSE_DIR"
 docker compose -f docker-compose.apps.yml restart
 
 echo "Done."

@@ -12,20 +12,20 @@ echo "========================================="
 
 mkdir -p "$BACKUP_DIR"
 
-# Load env vars for MySQL credentials
+# Load env vars for database credentials
 if [ -f "$COMPOSE_DIR/.env" ]; then
     set -a
     source "$COMPOSE_DIR/.env"
     set +a
 fi
 
-# 1. MySQL dump (all databases)
-echo "[1/3] Backing up MySQL databases..."
-MYSQL_BACKUP="$BACKUP_DIR/mysql_$TIMESTAMP.sql.gz"
-docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T mysql \
-    mysqldump -u root -p"${MYSQL_ROOT_PASSWORD}" --all-databases --single-transaction --routines --triggers \
-    | gzip > "$MYSQL_BACKUP"
-echo "  -> $MYSQL_BACKUP ($(du -h "$MYSQL_BACKUP" | cut -f1))"
+# 1. PostgreSQL dump (all databases)
+echo "[1/3] Backing up PostgreSQL databases..."
+PG_BACKUP="$BACKUP_DIR/postgres_$TIMESTAMP.sql.gz"
+docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T postgres \
+    pg_dumpall -U postgres \
+    | gzip > "$PG_BACKUP"
+echo "  -> $PG_BACKUP ($(du -h "$PG_BACKUP" | cut -f1))"
 
 # 2. Docker volumes backup
 echo "[2/3] Backing up Docker volumes..."
@@ -43,7 +43,7 @@ fi
 
 # 3. Cleanup old backups
 echo "[3/3] Cleaning up backups older than $RETENTION_DAYS days..."
-find "$BACKUP_DIR" -name "mysql_*.sql.gz" -mtime +"$RETENTION_DAYS" -delete 2>/dev/null || true
+find "$BACKUP_DIR" -name "postgres_*.sql.gz" -mtime +"$RETENTION_DAYS" -delete 2>/dev/null || true
 find "$BACKUP_DIR" -name "volumes_*.tar.gz" -mtime +"$RETENTION_DAYS" -delete 2>/dev/null || true
 
 echo ""

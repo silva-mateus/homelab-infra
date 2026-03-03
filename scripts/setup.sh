@@ -55,21 +55,21 @@ else
     echo "[4/6] .env already exists, skipping..."
 fi
 
-# 5. Start shared services (MySQL + Cloudflare Tunnel)
-echo "[5/6] Starting shared services (MySQL, Cloudflare Tunnel)..."
+# 5. Start shared services (PostgreSQL, Cloudflare Tunnel)
+echo "[5/6] Starting shared services (PostgreSQL, Cloudflare Tunnel)..."
 docker compose up -d
 
-echo "Waiting for MySQL to be healthy..."
+echo "Waiting for PostgreSQL to be healthy..."
 RETRIES=30
-until docker compose exec mysql mysqladmin ping -h localhost --silent 2>/dev/null; do
+until docker compose exec postgres pg_isready -U postgres 2>/dev/null; do
     RETRIES=$((RETRIES - 1))
     if [ $RETRIES -le 0 ]; then
-        echo "ERROR: MySQL did not become healthy in time."
+        echo "ERROR: PostgreSQL did not become healthy in time."
         exit 1
     fi
     sleep 2
 done
-echo "MySQL is ready."
+echo "PostgreSQL is ready."
 
 # 6. Start application services
 echo "[6/6] Starting application services..."

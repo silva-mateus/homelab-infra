@@ -1,25 +1,26 @@
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: homelab-mysql
+  postgres:
+    image: postgres:17
+    container_name: homelab-postgres
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      MUSICAS_DB_USER: ${MUSICAS_DB_USER}
+      MUSICAS_DB_PASSWORD: ${MUSICAS_DB_PASSWORD}
+      PASTORAL_DB_USER: ${PASTORAL_DB_USER}
+      PASTORAL_DB_PASSWORD: ${PASTORAL_DB_PASSWORD}
+      FINANCEIRO_DB_USER: ${FINANCEIRO_DB_USER}
+      FINANCEIRO_DB_PASSWORD: ${FINANCEIRO_DB_PASSWORD}
     volumes:
-      - mysql_data:/var/lib/mysql
-      - ./mysql/init:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
     ports:
-      - "127.0.0.1:3306:3306"
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
-    command: >
-      --default-authentication-plugin=mysql_native_password
-      --character-set-server=utf8mb4
-      --collation-server=utf8mb4_unicode_ci
-      --max-connections=100
 
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
@@ -29,12 +30,12 @@ services:
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
 
 volumes:
-  mysql_data:
-    name: homelab_mysql_data
+  postgres_data:
+    name: homelab_postgres_data
 
 networks:
   default:

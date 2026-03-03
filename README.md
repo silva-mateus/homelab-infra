@@ -4,7 +4,7 @@ IaC (Infrastructure as Code) para o homelab Proxmox, gerenciando todos os projet
 
 ## Arquitetura
 
-- **MySQL 8.0** compartilhado (um database por projeto)
+- **PostgreSQL 17** compartilhado para todos os projetos
 - **Cloudflare Tunnel** para acesso externo
 - **GHCR** (GitHub Container Registry) para imagens Docker
 - **GitHub Actions** reusable workflows para CI/CD
@@ -12,7 +12,7 @@ IaC (Infrastructure as Code) para o homelab Proxmox, gerenciando todos os projet
 ## Setup Inicial
 
 ```bash
-# No servidor (VM/LXC no Proxmox)
+# No servidor (VM no Proxmox)
 curl -fsSL https://raw.githubusercontent.com/SEU_USER/homelab-infra/main/scripts/setup.sh | bash
 ```
 
@@ -52,15 +52,15 @@ docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
 
 ## Adicionar Novo Projeto
 
-1. Adicionar database em `docker/mysql/init/01-create-databases.sql`
-2. Adicionar user em `docker/mysql/init/02-create-users.sql`
-3. Adicionar variáveis em `docker/.env.example` e `.env`
+1. Adicionar database e user nos init scripts (`docker/postgres/init/`)
+2. Adicionar variáveis em `docker/.env.example` e `.env`
+3. Passar as variáveis para o serviço `postgres` em `docker/docker-compose.yml`
 4. Adicionar service em `docker/docker-compose.apps.yml`
 5. Configurar hostname no Cloudflare Tunnel dashboard
 
 ## Backup
 
-O script `scripts/backup.sh` faz dump de todos os databases MySQL e volumes Docker.
+O script `scripts/backup.sh` faz dump de todos os databases PostgreSQL e volumes Docker.
 Backups são salvos em `/opt/homelab/backups/` com retenção de 30 dias.
 
 Para agendar backup diário:
