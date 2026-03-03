@@ -15,6 +15,7 @@ mkdir -p "$BACKUP_DIR"
 # Load env vars for database credentials
 if [ -f "$COMPOSE_DIR/.env" ]; then
     set -a
+    # shellcheck source=/dev/null
     source "$COMPOSE_DIR/.env"
     set +a
 fi
@@ -32,6 +33,7 @@ echo "[2/3] Backing up Docker volumes..."
 VOLUMES_BACKUP="$BACKUP_DIR/volumes_$TIMESTAMP.tar.gz"
 VOLUME_LIST=$(docker volume ls -q --filter name=homelab_ 2>/dev/null || true)
 if [ -n "$VOLUME_LIST" ]; then
+    # shellcheck disable=SC2046
     docker run --rm \
         $(echo "$VOLUME_LIST" | xargs -I{} echo "-v {}:/backup/{}:ro") \
         -v "$BACKUP_DIR:/output" \

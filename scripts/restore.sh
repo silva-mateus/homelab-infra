@@ -11,6 +11,7 @@ echo "========================================="
 # Load env vars
 if [ -f "$COMPOSE_DIR/.env" ]; then
     set -a
+    # shellcheck source=/dev/null
     source "$COMPOSE_DIR/.env"
     set +a
 fi
