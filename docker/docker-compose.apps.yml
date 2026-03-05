@@ -23,6 +23,14 @@ services:
       - musicas-igreja-api
 
   # ============================================================
+  # Portfolio
+  # ============================================================
+  portfolio:
+    image: ghcr.io/${GITHUB_USER}/portfolio:latest
+    container_name: portfolio
+    restart: unless-stopped
+    
+  # ============================================================
   # Gerenciamento Pastoral
   # ============================================================
   gerenciamento-pastoral-api:
