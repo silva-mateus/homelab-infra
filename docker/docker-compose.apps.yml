@@ -12,6 +12,7 @@ services:
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=musicas_igreja;Username=${MUSICAS_DB_USER};Password=${MUSICAS_DB_PASSWORD}"
     volumes:
       - musicas_data:/app/data
+      - musicas_organized:/app/organized
 
   musicas-igreja-web:
     image: ghcr.io/${GITHUB_USER}/musicas-igreja-web:latest
@@ -62,6 +63,7 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gerenciamento_financeiro;Username=${FINANCEIRO_DB_USER};Password=${FINANCEIRO_DB_PASSWORD}"
+      Session__CookieDomain: ${FINANCEIRO_COOKIE_DOMAIN}
 
   gerenciamento-financeiro-web:
     image: ghcr.io/${GITHUB_USER}/gerenciamento-financeiro-web:latest
@@ -75,6 +77,8 @@ services:
 volumes:
   musicas_data:
     name: homelab_musicas_data
+  musicas_organized:
+    name: homelab_musicas_organized
 
 networks:
   default:
