@@ -1,6 +1,14 @@
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+
 - search:
     provider: google
     target: _blank
 
-- docker:
-    server: local
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+      hourCycle: h23
