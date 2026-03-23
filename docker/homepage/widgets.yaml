@@ -1,0 +1,6 @@
+- search:
+    provider: google
+    target: _blank
+
+- docker:
+    server: local

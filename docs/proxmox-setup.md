@@ -325,6 +325,7 @@ No dashboard do Cloudflare (mesmo tunnel), adicionar **Public Hostnames**:
 | `portfolio.seudominio.com` | HTTP | `portfolio:80` |
 | `logs.seudominio.com` | HTTP | `homelab-dozzle:8080` |
 | `db.seudominio.com` | HTTP | `homelab-adminer:8080` |
+| `home.seudominio.com` | HTTP | `homelab-homepage:3000` |
 
 Os nomes dos serviços correspondem aos `container_name` nos arquivos docker-compose.
 

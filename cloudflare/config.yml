@@ -25,4 +25,6 @@
 #     service: http://homelab-dozzle:8080
 #   - hostname: db.yourdomain.com
 #     service: http://homelab-adminer:8080
+#   - hostname: home.yourdomain.com
+#     service: http://homelab-homepage:3000
 #   - service: http_status:404

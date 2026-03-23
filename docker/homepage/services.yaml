@@ -1,0 +1,33 @@
+- Aplicacoes:
+    - Musicas Igreja:
+        href: https://musicas.networkmat.uk
+        description: Gerenciamento de musicas da igreja
+        icon: mdi-music
+        server: local
+        container: musicas-igreja-web
+    - Gerenciamento Financeiro:
+        href: https://financeiro.networkmat.uk
+        description: Sistema financeiro
+        icon: mdi-cash-multiple
+        server: local
+        container: gerenciamento-financeiro-web
+    - Portfolio:
+        href: https://resume.networkmat.uk
+        description: Portfolio pessoal
+        icon: mdi-briefcase
+        server: local
+        container: portfolio
+
+- Infraestrutura:
+    - Dozzle:
+        href: https://logs.yourdomain.com
+        description: Logs Docker em tempo real
+        icon: mdi-text-box-search
+        server: local
+        container: homelab-dozzle
+    - Adminer:
+        href: https://db.yourdomain.com
+        description: Gerenciamento PostgreSQL
+        icon: mdi-database
+        server: local
+        container: homelab-adminer
