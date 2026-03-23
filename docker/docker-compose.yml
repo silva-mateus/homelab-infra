@@ -33,6 +33,17 @@ services:
     environment:
       DOZZLE_NO_ANALYTICS: "true"
 
+  adminer:
+    image: adminer:latest
+    container_name: homelab-adminer
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: dracula
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
     container_name: homelab-tunnel

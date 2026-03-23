@@ -23,4 +23,6 @@
 #     service: http://portfolio:80
 #   - hostname: logs.yourdomain.com
 #     service: http://homelab-dozzle:8080
+#   - hostname: db.yourdomain.com
+#     service: http://homelab-adminer:8080
 #   - service: http_status:404
