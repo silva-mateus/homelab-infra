@@ -24,3 +24,4 @@ EOSQL
 create_user_and_grant "$MUSICAS_DB_USER" "$MUSICAS_DB_PASSWORD" "musicas_igreja"
 create_user_and_grant "$PASTORAL_DB_USER" "$PASTORAL_DB_PASSWORD" "gerenciamento_pastoral"
 create_user_and_grant "$FINANCEIRO_DB_USER" "$FINANCEIRO_DB_PASSWORD" "gerenciamento_financeiro"
+create_user_and_grant "$AULAS_DB_USER" "$AULAS_DB_PASSWORD" "gestao_aulas"

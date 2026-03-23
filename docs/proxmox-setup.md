@@ -264,6 +264,10 @@ Variáveis que precisam ser preenchidas:
 | `PASTORAL_DB_PASSWORD` | Senha do banco pastoral |
 | `FINANCEIRO_DB_USER` | Usuário do banco financeiro |
 | `FINANCEIRO_DB_PASSWORD` | Senha do banco financeiro |
+| `FINANCEIRO_COOKIE_DOMAIN` | Domínio do cookie de sessão (ex: `financeiro.seudominio.com`) |
+| `AULAS_DB_USER` | Usuário do banco aulas (ex: `aulas_user`) |
+| `AULAS_DB_PASSWORD` | Senha do banco aulas |
+| `AULAS_COOKIE_DOMAIN` | Domínio do cookie de sessão (ex: `aulas.seudominio.com`) |
 
 ---
 
@@ -314,14 +318,61 @@ No dashboard do Cloudflare (mesmo tunnel), adicionar **Public Hostnames**:
 
 | Subdomain | Tipo | URL (Service) |
 |-----------|------|---------------|
+| `financeiro.seudominio.com` | HTTP | `gerenciamento-financeiro-web:80` |
 | `musicas.seudominio.com` | HTTP | `musicas-igreja-web:80` |
-| `api-musicas.seudominio.com` | HTTP | `musicas-igreja-api:5000` |
+| `pastoral.seudominio.com` | HTTP | `gerenciamento-pastoral-web:80` |
+| `aulas.seudominio.com` | HTTP | `gestao-aulas-web:80` |
+| `portfolio.seudominio.com` | HTTP | `portfolio:80` |
 
 Os nomes dos serviços correspondem aos `container_name` no `docker-compose.apps.yml`.
 
+> As aplicações web já fazem proxy reverso para a API internamente via nginx (`/api/` -> API container), então não é necessário expor a API separadamente.
+
 ---
 
-## 11. Subir Serviços
+## 11. Instalar GitHub Actions Self-Hosted Runner
+
+O CI/CD usa um runner self-hosted que roda diretamente no servidor para fazer pull das imagens e reiniciar containers.
+
+### 11.1 Criar o runner no GitHub
+
+1. Ir em **Settings** > **Actions** > **Runners** no repositório `homelab-infra` (ou na organização, para compartilhar entre repos)
+2. Clicar em **New self-hosted runner**
+3. Selecionar **Linux** e **x64**
+4. Seguir os comandos exibidos na tela (resumidos abaixo)
+
+### 11.2 Instalar no servidor
+
+```bash
+mkdir -p ~/actions-runner && cd ~/actions-runner
+
+curl -o actions-runner-linux-x64.tar.gz -L \
+  https://github.com/actions/runner/releases/latest/download/actions-runner-linux-x64-2.321.0.tar.gz
+
+tar xzf ./actions-runner-linux-x64.tar.gz
+
+./config.sh --url https://github.com/SEU_USUARIO/homelab-infra --token SEU_TOKEN
+```
+
+> O token e a URL exatos são exibidos na página do GitHub ao criar o runner. Use os valores de lá.
+
+### 11.3 Configurar como serviço
+
+```bash
+sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+
+O runner agora inicia automaticamente com o sistema e executa os jobs `runs-on: self-hosted`.
+
+### 11.4 Verificar
+
+De volta ao GitHub, em **Settings** > **Actions** > **Runners**, o runner deve aparecer como **Idle** (online).
+
+---
+
+## 12. Subir Serviços
 
 ```bash
 cd /opt/homelab/docker
@@ -348,7 +399,7 @@ docker compose -f docker-compose.apps.yml ps
 
 ---
 
-## 12. Configurar Backup Automático
+## 13. Configurar Backup Automático
 
 Agendar backup diário às 3h da manhã:
 
@@ -372,7 +423,7 @@ Os backups ficam em `/opt/homelab/backups/` com retenção de 30 dias.
 
 ---
 
-## 13. Comandos Úteis
+## 14. Comandos Úteis
 
 ```bash
 cd /opt/homelab/docker

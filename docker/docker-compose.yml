@@ -11,6 +11,8 @@ services:
       PASTORAL_DB_PASSWORD: ${PASTORAL_DB_PASSWORD}
       FINANCEIRO_DB_USER: ${FINANCEIRO_DB_USER}
       FINANCEIRO_DB_PASSWORD: ${FINANCEIRO_DB_PASSWORD}
+      AULAS_DB_USER: ${AULAS_DB_USER}
+      AULAS_DB_PASSWORD: ${AULAS_DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init:/docker-entrypoint-initdb.d

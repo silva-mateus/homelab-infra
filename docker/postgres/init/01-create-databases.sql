@@ -14,3 +14,8 @@ CREATE DATABASE gerenciamento_financeiro
   ENCODING 'UTF8'
   LC_COLLATE 'en_US.utf8'
   LC_CTYPE 'en_US.utf8';
+
+CREATE DATABASE gestao_aulas
+  ENCODING 'UTF8'
+  LC_COLLATE 'en_US.utf8'
+  LC_CTYPE 'en_US.utf8';

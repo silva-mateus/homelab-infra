@@ -11,10 +11,14 @@
 # credentials-file: /root/.cloudflared/<tunnel-id>.json
 #
 # ingress:
-#   - hostname: musicas.yourdomain.com
-#     service: http://musicas-igreja-web:3000
-#   - hostname: pastoral.yourdomain.com
-#     service: http://gerenciamento-pastoral-web:3000
 #   - hostname: financeiro.yourdomain.com
-#     service: http://gerenciamento-financeiro-web:3000
+#     service: http://gerenciamento-financeiro-web:80
+#   - hostname: musicas.yourdomain.com
+#     service: http://musicas-igreja-web:80
+#   - hostname: pastoral.yourdomain.com
+#     service: http://gerenciamento-pastoral-web:80
+#   - hostname: aulas.yourdomain.com
+#     service: http://gestao-aulas-web:80
+#   - hostname: portfolio.yourdomain.com
+#     service: http://portfolio:80
 #   - service: http_status:404

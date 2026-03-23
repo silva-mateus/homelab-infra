@@ -71,8 +71,31 @@ services:
     restart: unless-stopped
     environment:
       BACKEND_URL: http://gerenciamento-financeiro-api:5000
+      NGINX_ENVSUBST_FILTER: BACKEND
     depends_on:
       - gerenciamento-financeiro-api
+
+  # ============================================================
+  # Gestao Aulas de Musica
+  # ============================================================
+  gestao-aulas-api:
+    image: ghcr.io/${GITHUB_USER}/gestao-aulas-api:latest
+    container_name: gestao-aulas-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:5000
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gestao_aulas;Username=${AULAS_DB_USER};Password=${AULAS_DB_PASSWORD}"
+      Session__CookieDomain: ${AULAS_COOKIE_DOMAIN}
+
+  gestao-aulas-web:
+    image: ghcr.io/${GITHUB_USER}/gestao-aulas-web:latest
+    container_name: gestao-aulas-web
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://gestao-aulas-api:5000
+    depends_on:
+      - gestao-aulas-api
 
 volumes:
   musicas_data:

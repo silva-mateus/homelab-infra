@@ -72,13 +72,59 @@ Copiar todo o conteúdo (incluindo `-----BEGIN` e `-----END`) e colar como valor
 Os secrets precisam ser configurados em **cada repositório** que faz deploy:
 
 - `homelab-infra` (para o workflow de infra)
-- `musicas-igreja` (ou o repo do app, para o workflow de deploy do app)
+- `gerenciamento-financeiro`
+- `musicas-igreja`
+- Qualquer outro repo de app que use o reusable workflow
 
 Se preferir, pode usar **Organization secrets** para compartilhar entre repos.
 
 ---
 
-## 3. CI/CD do homelab-infra
+## 3. Self-Hosted Runner
+
+Os workflows de deploy usam `runs-on: self-hosted`, ou seja, o runner do GitHub Actions roda diretamente no servidor do homelab. Isso permite que o deploy faça `docker compose pull/up` localmente.
+
+### 3.1 Criar o runner no GitHub
+
+1. No repositório `homelab-infra` (ou na organização), ir em **Settings** > **Actions** > **Runners**
+2. Clicar em **New self-hosted runner**
+3. Selecionar **Linux** e **x64**
+4. A página exibirá os comandos com o token correto
+
+### 3.2 Instalar no servidor
+
+```bash
+mkdir -p ~/actions-runner && cd ~/actions-runner
+
+# Baixar (usar a versão e URL exibidas no GitHub)
+curl -o actions-runner-linux-x64.tar.gz -L \
+  https://github.com/actions/runner/releases/latest/download/actions-runner-linux-x64-2.321.0.tar.gz
+
+tar xzf ./actions-runner-linux-x64.tar.gz
+
+# Configurar (usar o token exibido no GitHub)
+./config.sh --url https://github.com/SEU_USUARIO/homelab-infra --token SEU_TOKEN
+```
+
+### 3.3 Registrar como serviço do sistema
+
+```bash
+sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+
+O runner inicia automaticamente com o sistema operacional.
+
+### 3.4 Verificar
+
+Em **Settings** > **Actions** > **Runners**, o runner deve aparecer como **Idle** (online).
+
+> Se usar Organization runner, todos os repos da org podem compartilhar o mesmo runner. Caso contrário, é necessário registrar em cada repo individualmente, ou usar labels para direcionar.
+
+---
+
+## 4. CI/CD do homelab-infra
 
 O repositório `homelab-infra` tem seu próprio workflow que valida os arquivos e faz deploy ao dar push na `main`.
 
@@ -113,7 +159,7 @@ Push/PR na main
 
 ---
 
-## 4. CI/CD dos Apps (Exemplo: musicas-igreja)
+## 5. CI/CD dos Apps (Exemplo: musicas-igreja)
 
 Cada repositório de app usa o **reusable workflow** definido em `homelab-infra` para build e deploy.
 
@@ -218,10 +264,11 @@ docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
 
 ---
 
-## 5. Checklist Completa
+## 6. Checklist Completa
 
 ### Para o homelab-infra
 
+- [ ] Instalar self-hosted runner no servidor (seção 3)
 - [ ] Criar secrets: `DEPLOY_SSH_KEY`, `DEPLOY_HOST`, `DEPLOY_USER`
 - [ ] Configurar branch protection na `main`
 - [ ] Verificar que o workflow `ci.yml` está rodando
@@ -234,4 +281,4 @@ docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
 - [ ] Garantir que o Dockerfile existe no caminho configurado
 - [ ] Adicionar o serviço em `homelab-infra/docker/docker-compose.apps.yml`
 - [ ] Adicionar database/user nos init scripts do PostgreSQL
-- [ ] Configurar hostname no Cloudflare Tunnel
+- [ ] Configurar hostname no Cloudflare Tunnel dashboard
