@@ -12,6 +12,3 @@ layout:
   Infraestrutura:
     style: row
     columns: 5
-  Repositorios:
-    style: row
-    columns: 5
