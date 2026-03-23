@@ -21,4 +21,6 @@
 #     service: http://gestao-aulas-web:80
 #   - hostname: portfolio.yourdomain.com
 #     service: http://portfolio:80
+#   - hostname: logs.yourdomain.com
+#     service: http://homelab-dozzle:8080
 #   - service: http_status:404

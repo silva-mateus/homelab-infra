@@ -323,8 +323,9 @@ No dashboard do Cloudflare (mesmo tunnel), adicionar **Public Hostnames**:
 | `pastoral.seudominio.com` | HTTP | `gerenciamento-pastoral-web:80` |
 | `aulas.seudominio.com` | HTTP | `gestao-aulas-web:80` |
 | `portfolio.seudominio.com` | HTTP | `portfolio:80` |
+| `logs.seudominio.com` | HTTP | `homelab-dozzle:8080` |
 
-Os nomes dos serviços correspondem aos `container_name` no `docker-compose.apps.yml`.
+Os nomes dos serviços correspondem aos `container_name` nos arquivos docker-compose.
 
 > As aplicações web já fazem proxy reverso para a API internamente via nginx (`/api/` -> API container), então não é necessário expor a API separadamente.
 

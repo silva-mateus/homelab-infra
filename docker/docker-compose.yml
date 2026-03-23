@@ -24,6 +24,15 @@ services:
       timeout: 5s
       retries: 5
 
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: homelab-dozzle
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      DOZZLE_NO_ANALYTICS: "true"
+
   cloudflare-tunnel:
     image: cloudflare/cloudflared:latest
     container_name: homelab-tunnel
