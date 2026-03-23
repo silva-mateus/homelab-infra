@@ -2,8 +2,14 @@
     - Homelab Infra:
         - href: https://github.com/silva-mateus/homelab-infra
           icon: mdi-github
-    - Musicas Igreja API:
-        - href: https://github.com/silva-mateus/musicas-igreja-api
+    - Core:
+        - href: https://github.com/silva-mateus/core-system
+          icon: mdi-github
+    - Gerenciamento Financeiro:
+        - href: https://github.com/silva-mateus/gerenciamento-financeiro
+          icon: mdi-github
+    - Musicas Igreja:
+        - href: https://github.com/silva-mateus/musicas-igreja
           icon: mdi-github
     - Portfolio:
         - href: https://github.com/silva-mateus/portfolio

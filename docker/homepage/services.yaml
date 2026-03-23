@@ -20,13 +20,13 @@
 
 - Infraestrutura:
     - Dozzle:
-        href: https://logs.yourdomain.com
+        href: https://logs.networkmat.uk
         description: Logs Docker em tempo real
         icon: mdi-text-box-search
         server: local
         container: homelab-dozzle
     - Adminer:
-        href: https://db.yourdomain.com
+        href: https://db.networkmat.uk
         description: Gerenciamento PostgreSQL
         icon: mdi-database
         server: local
