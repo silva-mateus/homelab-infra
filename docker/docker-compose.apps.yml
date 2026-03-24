@@ -30,7 +30,15 @@ services:
     image: ghcr.io/${GITHUB_USER}/portfolio:latest
     container_name: portfolio
     restart: unless-stopped
-    
+
+  # ============================================================
+  # Notes (Jekyll)
+  # ============================================================
+  notes:
+    image: ghcr.io/${GITHUB_USER}/notes:latest
+    container_name: notes
+    restart: unless-stopped
+
   # ============================================================
   # Gerenciamento Pastoral
   # ============================================================

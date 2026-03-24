@@ -17,6 +17,12 @@
         icon: mdi-briefcase
         server: local
         container: portfolio
+    - Notes:
+        href: https://notes.networkmat.uk
+        description: Anotações pessoais
+        icon: mdi-notebook-edit
+        server: local
+        container: notes
 
 - Infraestrutura:
     - Dozzle:

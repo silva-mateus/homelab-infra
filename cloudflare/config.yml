@@ -21,6 +21,8 @@
 #     service: http://gestao-aulas-web:80
 #   - hostname: portfolio.yourdomain.com
 #     service: http://portfolio:80
+#   - hostname: notes.yourdomain.com
+#     service: http://notes:80
 #   - hostname: logs.yourdomain.com
 #     service: http://homelab-dozzle:8080
 #   - hostname: db.yourdomain.com
