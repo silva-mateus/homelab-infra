@@ -31,6 +31,29 @@ services:
     container_name: portfolio
     restart: unless-stopped
 
+portfolio-api:
+  image: ghcr.io/silva-mateus/portfolio-api:latest
+  container_name: portfolio-api
+  restart: unless-stopped
+  networks:
+    - portfolio-network
+  volumes:
+    - portfolio-highscores:/app/data
+  environment:
+    - ASPNETCORE_ENVIRONMENT=Production
+    - ASPNETCORE_URLS=http://+:5000
+    - CORS_ORIGINS=https://resume.networkmat.uk
+    - SMTP_USER=${SMTP_USER}
+    - SMTP_APP_PASSWORD=${SMTP_APP_PASSWORD}
+    - SMTP_TO=${SMTP_TO}
+    - SMTP_FROM=${SMTP_FROM}
+  healthcheck:
+    test: ["CMD-SHELL", "curl -fsS http://localhost:5000/api/health || exit 1"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    
+
   # ============================================================
   # Notes (Jekyll)
   # ============================================================
