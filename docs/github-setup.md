@@ -259,7 +259,7 @@ cd /opt/homelab/docker
 docker pull ghcr.io/SEU_USUARIO/musicas-igreja-api:abc1234
 
 # Ou editar o compose temporariamente para usar uma tag fixa
-docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d musicas-igreja-api
 ```
 
 ---
@@ -281,4 +281,5 @@ docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
 - [ ] Garantir que o Dockerfile existe no caminho configurado
 - [ ] Adicionar o serviço em `homelab-infra/docker/docker-compose.apps.yml`
 - [ ] Adicionar database/user nos init scripts do PostgreSQL
-- [ ] Configurar hostname no Cloudflare Tunnel dashboard
+- [ ] No servidor: `REDIS_PASSWORD` em `/opt/homelab/docker/.env` (Redis partilhado) e deploy com `docker compose -f docker-compose.yml -f docker-compose.apps.yml`
+- [ ] Configurar hostname no Cloudflare Tunnel dashboard (origem interna com a porta correta do contentor, ex.: `:8080` para o web do Gestão Financeira)

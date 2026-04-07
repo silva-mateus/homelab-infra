@@ -64,6 +64,6 @@ jobs:
       - name: Pull new image and restart service
         run: |
           cd /opt/homelab/docker
-          docker compose -f docker-compose.apps.yml pull ${{ inputs.service_name }}
-          docker compose -f docker-compose.apps.yml up -d ${{ inputs.service_name }}
+          docker compose -f docker-compose.yml -f docker-compose.apps.yml pull ${{ inputs.service_name }}
+          docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d ${{ inputs.service_name }}
           docker image prune -f

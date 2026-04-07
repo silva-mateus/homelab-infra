@@ -380,24 +380,17 @@ De volta ao GitHub, em **Settings** > **Actions** > **Runners**, o runner deve a
 ```bash
 cd /opt/homelab/docker
 
-# Subir infraestrutura (PostgreSQL + Cloudflare Tunnel)
-docker compose up -d
+# Stack completa: PostgreSQL, Redis, Cloudflare Tunnel e apps (use sempre os dois ficheiros)
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d
 
-# Verificar se PostgreSQL está saudável
-docker compose ps
-
-# Subir apps (ou apenas os desejados)
-docker compose -f docker-compose.apps.yml up -d
-
-# Ou subir apenas o musicas-igreja
-docker compose -f docker-compose.apps.yml up -d musicas-igreja-api musicas-igreja-web
+# Ou apenas alguns serviços (ex.: musicas-igreja)
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d musicas-igreja-api musicas-igreja-web
 ```
 
 Verificar se tudo está rodando:
 
 ```bash
-docker compose ps
-docker compose -f docker-compose.apps.yml ps
+docker compose -f docker-compose.yml -f docker-compose.apps.yml ps
 ```
 
 ---
@@ -432,29 +425,27 @@ Os backups ficam em `/opt/homelab/backups/` com retenção de 30 dias.
 cd /opt/homelab/docker
 
 # Status de todos os containers
-docker compose ps
-docker compose -f docker-compose.apps.yml ps
+docker compose -f docker-compose.yml -f docker-compose.apps.yml ps
 
 # Logs em tempo real
-docker compose logs -f postgres
-docker compose -f docker-compose.apps.yml logs -f musicas-igreja-api
+docker compose -f docker-compose.yml -f docker-compose.apps.yml logs -f postgres
+docker compose -f docker-compose.yml -f docker-compose.apps.yml logs -f musicas-igreja-api
 
 # Reiniciar um serviço
-docker compose -f docker-compose.apps.yml restart musicas-igreja-api
+docker compose -f docker-compose.yml -f docker-compose.apps.yml restart musicas-igreja-api
 
 # Atualizar imagem e reiniciar
-docker compose -f docker-compose.apps.yml pull musicas-igreja-api
-docker compose -f docker-compose.apps.yml up -d musicas-igreja-api
+docker compose -f docker-compose.yml -f docker-compose.apps.yml pull musicas-igreja-api
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d musicas-igreja-api
 
-# Atualizar infraestrutura (após git pull)
+# Atualizar stack (após git pull)
 cd /opt/homelab
 git pull
 cd docker
-docker compose up -d
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d
 
-# Parar tudo
-docker compose -f docker-compose.apps.yml down
-docker compose down
+# Parar tudo (atenção: remove contentores da stack merge)
+docker compose -f docker-compose.yml -f docker-compose.apps.yml down
 
 # Backup manual
 /opt/homelab/scripts/backup.sh

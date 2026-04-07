@@ -55,13 +55,13 @@ else
     echo "[4/6] .env already exists, skipping..."
 fi
 
-# 5. Start shared services (PostgreSQL, Cloudflare Tunnel)
-echo "[5/6] Starting shared services (PostgreSQL, Cloudflare Tunnel)..."
-docker compose up -d
+# 5–6. Start stack (PostgreSQL, Redis, tunnel, apps) — merge both compose files
+echo "[5/6] Starting full stack (PostgreSQL, Redis, Cloudflare Tunnel, apps)..."
+docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d
 
 echo "Waiting for PostgreSQL to be healthy..."
 RETRIES=30
-until docker compose exec postgres pg_isready -U postgres 2>/dev/null; do
+until docker compose -f docker-compose.yml -f docker-compose.apps.yml exec postgres pg_isready -U postgres 2>/dev/null; do
     RETRIES=$((RETRIES - 1))
     if [ $RETRIES -le 0 ]; then
         echo "ERROR: PostgreSQL did not become healthy in time."
@@ -71,16 +71,14 @@ until docker compose exec postgres pg_isready -U postgres 2>/dev/null; do
 done
 echo "PostgreSQL is ready."
 
-# 6. Start application services
-echo "[6/6] Starting application services..."
-docker compose -f docker-compose.apps.yml up -d
+echo "[6/6] Verifying stack..."
+docker compose -f docker-compose.yml -f docker-compose.apps.yml ps
 
 echo ""
 echo "========================================="
 echo "  Setup complete!"
 echo "========================================="
 echo ""
-echo "Shared services: docker compose -f docker-compose.yml ps"
-echo "App services:    docker compose -f docker-compose.apps.yml ps"
-echo "Logs:            docker compose -f docker-compose.apps.yml logs -f <service>"
+echo "Status: docker compose -f docker-compose.yml -f docker-compose.apps.yml ps"
+echo "Logs:   docker compose -f docker-compose.yml -f docker-compose.apps.yml logs -f <service>"
 echo ""

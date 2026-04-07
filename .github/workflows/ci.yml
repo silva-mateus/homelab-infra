@@ -17,7 +17,7 @@ jobs:
         working-directory: docker
         run: |
           docker compose -f docker-compose.yml config --quiet
-          docker compose -f docker-compose.apps.yml config --quiet
+          docker compose -f docker-compose.yml -f docker-compose.apps.yml config --quiet
 
       - name: ShellCheck
         uses: ludeeus/action-shellcheck@2.0.0
@@ -34,4 +34,4 @@ jobs:
           cd /opt/homelab
           git pull
           cd docker
-          docker compose up -d
+          docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d

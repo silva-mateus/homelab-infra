@@ -169,7 +169,7 @@ restore_volumes() {
     if [ -n "$services" ]; then
         echo "  [$app] Stopping app services..."
         # shellcheck disable=SC2086
-        docker compose -f "$COMPOSE_DIR/docker-compose.apps.yml" stop $services 2>/dev/null || true
+        docker compose -f "$COMPOSE_DIR/docker-compose.yml" -f "$COMPOSE_DIR/docker-compose.apps.yml" stop $services 2>/dev/null || true
     fi
 
     for volume in $volumes; do
@@ -192,7 +192,7 @@ restore_volumes() {
     if [ -n "$services" ]; then
         echo "  [$app] Starting app services..."
         # shellcheck disable=SC2086
-        docker compose -f "$COMPOSE_DIR/docker-compose.apps.yml" start $services 2>/dev/null || true
+        docker compose -f "$COMPOSE_DIR/docker-compose.yml" -f "$COMPOSE_DIR/docker-compose.apps.yml" start $services 2>/dev/null || true
     fi
 }
 
@@ -202,7 +202,7 @@ restart_app_services() {
     if [ -n "$services" ]; then
         echo "  [$app] Restarting app services..."
         # shellcheck disable=SC2086
-        docker compose -f "$COMPOSE_DIR/docker-compose.apps.yml" restart $services 2>/dev/null || true
+        docker compose -f "$COMPOSE_DIR/docker-compose.yml" -f "$COMPOSE_DIR/docker-compose.apps.yml" restart $services 2>/dev/null || true
     fi
 }
 

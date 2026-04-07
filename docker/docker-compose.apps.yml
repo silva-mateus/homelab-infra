@@ -92,7 +92,18 @@ services:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
       ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=gerenciamento_financeiro;Username=${FINANCEIRO_DB_USER};Password=${FINANCEIRO_DB_PASSWORD}"
+      Redis__ConnectionString: "redis:6379,password=${REDIS_PASSWORD}"
       Session__CookieDomain: ${FINANCEIRO_COOKIE_DOMAIN}
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5000/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   gerenciamento-financeiro-web:
     image: ghcr.io/${GITHUB_USER}/gerenciamento-financeiro-web:latest
@@ -134,7 +145,5 @@ volumes:
   portfolio_highscores:
     name: homelab_portfolio_highscores
 
-networks:
-  default:
-    name: homelab
-    external: true
+# Use together with docker-compose.yml so all services share the homelab network:
+#   docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d
