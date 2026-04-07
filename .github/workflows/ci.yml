@@ -30,9 +30,11 @@ jobs:
     needs: validate
     runs-on: self-hosted
     steps:
-      - name: Pull latest changes and restart services
+      - name: Sync repo and restart services
         run: |
           cd /opt/homelab
-          git pull
+          # Alinhar com origin/main (evita falha quando há edições locais em scripts)
+          git fetch origin
+          git reset --hard origin/main
           cd docker
           docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d
