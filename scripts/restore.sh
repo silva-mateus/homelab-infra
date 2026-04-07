@@ -60,20 +60,28 @@ EOF
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-find_latest_timestamp() {
-    local app_dir="$1"
-    ls -1 "$app_dir" 2>/dev/null \
-        | grep -oE '[0-9]{8}_[0-9]{6}' \
-        | sort -ru \
-        | head -1
-}
-
 list_timestamps() {
     local app_dir="$1"
-    ls -1 "$app_dir" 2>/dev/null \
-        | grep -oE '[0-9]{8}_[0-9]{6}' \
-        | sort -ru \
-        | uniq
+    local out=()
+    local f
+    shopt -s nullglob
+    for f in "$app_dir"/*; do
+        local base
+        base=$(basename "$f")
+        if [[ "$base" =~ ([0-9]{8}_[0-9]{6}) ]]; then
+            out+=("${BASH_REMATCH[1]}")
+        fi
+    done
+    shopt -u nullglob
+    if [ "${#out[@]}" -eq 0 ]; then
+        return 0
+    fi
+    printf '%s\n' "${out[@]}" | sort -ru | uniq
+}
+
+find_latest_timestamp() {
+    local app_dir="$1"
+    list_timestamps "$app_dir" | head -n1
 }
 
 apps_with_backups() {
