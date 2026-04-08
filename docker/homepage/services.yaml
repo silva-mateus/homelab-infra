@@ -6,8 +6,8 @@
         server: local
         container: musicas-igreja-web
     - Gerenciamento Financeiro:
-        href: https://financeiro.networkmat.uk
-        description: Sistema financeiro
+        href: https://gestao.networkmat.uk
+        description: Gerenciamento financeiro
         icon: mdi-cash-multiple
         server: local
         container: gerenciamento-financeiro-web
